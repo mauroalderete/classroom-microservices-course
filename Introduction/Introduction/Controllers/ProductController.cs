@@ -1,5 +1,4 @@
 ﻿using Introduction.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -31,6 +30,14 @@ namespace Introduction.Controllers
                 return NotFound();
             }
             return product;
+        }
+
+        [HttpPost]
+        public ActionResult Create(Product product)
+        {
+            product.Id = Products.Count + 1;
+            Products.Add(product);
+            return CreatedAtAction(nameof(Get), new { id = product.Id }, product);
         }
     }
 }
