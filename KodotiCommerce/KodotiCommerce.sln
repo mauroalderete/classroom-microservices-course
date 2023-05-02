@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{B060B1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Domain", "src\Services\Catalog\Catalog.Domain\Catalog.Domain.csproj", "{EF2703F0-5036-4D31-942F-44766ED2B089}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Persistence.Database", "src\Services\Catalog\Catalog.Persistence.Database\Catalog.Persistence.Database.csproj", "{14213919-C32D-4E0E-9AA2-1A43A486F802}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{EF2703F0-5036-4D31-942F-44766ED2B089}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF2703F0-5036-4D31-942F-44766ED2B089}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF2703F0-5036-4D31-942F-44766ED2B089}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14213919-C32D-4E0E-9AA2-1A43A486F802}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14213919-C32D-4E0E-9AA2-1A43A486F802}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14213919-C32D-4E0E-9AA2-1A43A486F802}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14213919-C32D-4E0E-9AA2-1A43A486F802}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +64,7 @@ Global
 		{1163BE72-C59D-47CB-9BE5-FE22DF4A796A} = {80B0AE5C-55CF-405D-AFFC-57F522C3B351}
 		{B060B16C-2054-42C1-A4BA-7D0AF6C28A0A} = {80B0AE5C-55CF-405D-AFFC-57F522C3B351}
 		{EF2703F0-5036-4D31-942F-44766ED2B089} = {B060B16C-2054-42C1-A4BA-7D0AF6C28A0A}
+		{14213919-C32D-4E0E-9AA2-1A43A486F802} = {1163BE72-C59D-47CB-9BE5-FE22DF4A796A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA608C00-AE09-4F21-B3EA-E180FF5F711B}
