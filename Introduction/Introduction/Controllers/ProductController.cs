@@ -39,5 +39,21 @@ namespace Introduction.Controllers
             Products.Add(product);
             return CreatedAtAction(nameof(Get), new { id = product.Id }, product);
         }
+
+        [HttpPut("{Id}")]
+        public ActionResult Update(int Id, Product product)
+        {
+            var existingProduct = Products.Find(p => p.Id == Id);
+            if (existingProduct == null)
+            {
+                return NotFound();
+            }
+
+            existingProduct.Name = product.Name;
+            existingProduct.Description = product.Description;
+            existingProduct.Price = product.Price;
+
+            return NoContent();
+        }
     }
 }
