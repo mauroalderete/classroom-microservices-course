@@ -55,5 +55,12 @@ namespace Introduction.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{Id}")]
+        public ActionResult Delete(int Id)
+        {
+            Products = Products.FindAll(p => p.Id != Id);
+            return NoContent();
+        }
     }
 }
