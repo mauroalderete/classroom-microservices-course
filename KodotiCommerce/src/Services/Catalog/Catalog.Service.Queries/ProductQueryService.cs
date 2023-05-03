@@ -35,6 +35,8 @@ namespace Catalog.Service.Queries
 
         public async Task<ProductDto> GetAsync(int d)
         {
+            var t = await _dbContext.Products.SingleAsync(p => p.ProductId == d);
+
             return (await _dbContext.Products.SingleAsync(p => p.ProductId == d)).MapTo<ProductDto>();
         }
     }
