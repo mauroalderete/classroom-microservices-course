@@ -1,3 +1,4 @@
+using Customer.Service.Queries;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,8 @@ namespace Order.Api
                     Configuration.GetConnectionString("DefaultConnection"),
                     sqlOptions => sqlOptions.MigrationsHistoryTable("__EFMigrationsHistory", "Catalog"))
             );
+
+            services.AddTransient<IOrderQueryService, OrderQueryService>();
 
             services.AddControllers();
         }
