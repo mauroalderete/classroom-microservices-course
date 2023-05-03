@@ -22,7 +22,7 @@ namespace Catalog.Test
         }
 
         [TestMethod]
-        public void TryTosubstracStockWhenProductHasStock()
+        public void TryToSubstractStockWhenProductHasStock()
         {
             var context = ApplicationDbContextInMemory.Get();
 
@@ -55,7 +55,7 @@ namespace Catalog.Test
 
         [TestMethod]
         [ExpectedException(typeof(ProductInStockUpdateCommandException))]
-        public void TryTosubstracStockWhenProductHasNotStock()
+        public void TryToSubstractStockWhenProductHasNotStock()
         {
             var context = ApplicationDbContextInMemory.Get();
 
@@ -92,6 +92,71 @@ namespace Catalog.Test
                 Assert.IsTrue(exception is ProductInStockUpdateCommandException);
                 throw exception;
             }
+        }
+
+        [TestMethod]
+        public void TryToAddStockWhenProductExist()
+        {
+            var context = ApplicationDbContextInMemory.Get();
+
+            const int productStockId = 3;
+            const int productId = 3;
+
+            context.Stocks.Add(new Domain.ProductInStock()
+            {
+                ProductId = productId,
+                ProductInStockId = productStockId,
+                Stock = 1,
+            });
+
+            context.SaveChanges();
+
+            var handler = new ProductInStockUpdateStockEventHandler(context, GetLogger);
+
+            handler.Handle(new ProductInStockUpdateCommand()
+            {
+                Items = new List<ProductInStockUpdateItem>()
+                {
+                    new ProductInStockUpdateItem() {
+                        ProductId = productId,
+                        Action = common.Enums.ProductInStockAction.Add,
+                        Stock = 1
+                    }
+                }
+            }, new CancellationToken()).Wait();
+
+            var stock = context.Stocks.Find(productStockId);
+            Assert.IsNotNull(stock);
+            Assert.AreEqual(2, stock.Stock);
+        }
+
+        [TestMethod]
+        public void TryToAddStockWhenProductNotExist()
+        {
+            var context = ApplicationDbContextInMemory.Get();
+
+            const int productStockId = 4;
+            const int productId = 4;
+
+            context.SaveChanges();
+
+            var handler = new ProductInStockUpdateStockEventHandler(context, GetLogger);
+
+            handler.Handle(new ProductInStockUpdateCommand()
+            {
+                Items = new List<ProductInStockUpdateItem>()
+                {
+                    new ProductInStockUpdateItem() {
+                        ProductId = productId,
+                        Action = common.Enums.ProductInStockAction.Add,
+                        Stock = 1
+                    }
+                }
+            }, new CancellationToken()).Wait();
+
+            var stock = context.Stocks.Find(productStockId);
+            Assert.IsNotNull(stock);
+            Assert.AreEqual(1, stock.Stock);
         }
     }
 }
