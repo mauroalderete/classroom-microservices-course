@@ -1,4 +1,5 @@
 using Customer.Service.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Order.Persistence.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Order.Api
@@ -34,6 +36,8 @@ namespace Order.Api
             );
 
             services.AddTransient<IOrderQueryService, OrderQueryService>();
+
+            services.AddMediatR(Assembly.Load("Order.Service.EventHandlers"));
 
             services.AddControllers();
         }

@@ -1,6 +1,8 @@
 ﻿using Customer.Service.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Order.Service.EventHandlers.Commands;
 using Order.Service.Queries.DTO;
 using Service.Common.Collection;
 using System;
@@ -15,11 +17,13 @@ namespace Order.Api.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderQueryService _orderQueryService;
+        private readonly IMediator _mediator;
         private readonly ILogger _logger;
-        public OrderController(IOrderQueryService orderQueryService, ILogger<OrderController> logger)
+        public OrderController(IOrderQueryService orderQueryService, ILogger<OrderController> logger, IMediator mediator)
         {
             _orderQueryService = orderQueryService;
             _logger = logger;
+            _mediator = mediator;
         }
 
         [HttpGet]
@@ -39,6 +43,13 @@ namespace Order.Api.Controllers
         public async Task<OrderDto> Get(int id)
         {
             return await _orderQueryService.GetAsync(id);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(OrderCreateCommand command)
+        {
+            await _mediator.Publish(command);
+            return Ok();
         }
     }
 }
