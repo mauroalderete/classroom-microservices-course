@@ -11,7 +11,9 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using MediatR;
 
 namespace Customer.Api
 {
@@ -34,6 +36,8 @@ namespace Customer.Api
             );
 
             services.AddTransient<IClientQueryService, ClientQueryService>();
+
+            services.AddMediatR(Assembly.Load("Customer.Service.EventHandlers"));
 
             services.AddControllers();
         }

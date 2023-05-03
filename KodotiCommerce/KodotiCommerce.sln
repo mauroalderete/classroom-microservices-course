@@ -73,6 +73,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Customer.Persistence.Databa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Customer.Service.Queries", "src\Services\Customer\Customer.Service.Queries\Customer.Service.Queries.csproj", "{3A5E827A-176F-472A-9288-E34D0C1ED713}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Customer.Service.EventHandlers", "src\Services\Customer\Customer.Service.EventHandlers\Customer.Service.EventHandlers.csproj", "{D4DB3712-2910-4A2B-ADE3-82122450261A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,10 @@ Global
 		{3A5E827A-176F-472A-9288-E34D0C1ED713}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A5E827A-176F-472A-9288-E34D0C1ED713}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A5E827A-176F-472A-9288-E34D0C1ED713}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4DB3712-2910-4A2B-ADE3-82122450261A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4DB3712-2910-4A2B-ADE3-82122450261A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4DB3712-2910-4A2B-ADE3-82122450261A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4DB3712-2910-4A2B-ADE3-82122450261A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -175,6 +181,7 @@ Global
 		{4BF3D803-16B3-40B7-9B22-A7A0633A90B7} = {2DB88EA5-FB90-4914-ABC5-28E66EE5E4C3}
 		{4FE68018-4953-476C-AE6E-9450B882C145} = {A5C401A9-9888-40D7-8118-A34EBF041601}
 		{3A5E827A-176F-472A-9288-E34D0C1ED713} = {8F7D504A-FB31-4719-88D4-5FD4CA93E6E9}
+		{D4DB3712-2910-4A2B-ADE3-82122450261A} = {8F7D504A-FB31-4719-88D4-5FD4CA93E6E9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA608C00-AE09-4F21-B3EA-E180FF5F711B}
