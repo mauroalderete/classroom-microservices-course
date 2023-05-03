@@ -3,6 +3,7 @@ using Catalog.Persistence.Database;
 using Catalog.Service.EventHandlers.Commands;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,16 +16,22 @@ namespace Catalog.Service.EventHandlers
     public class ProductInStockUpdateStockEventHandler : INotificationHandler<ProductInStockUpdateCommand>
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly ILogger _logger;
 
-        public ProductInStockUpdateStockEventHandler(ApplicationDbContext dbContext)
+        public ProductInStockUpdateStockEventHandler(ApplicationDbContext dbContext, ILogger<ProductInStockUpdateStockEventHandler> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public async Task Handle(ProductInStockUpdateCommand notification, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("--- ProductInStockUpdateCommand started");
+
             var products = notification.Items.Select(p => p.ProductId);
             var stocks = await _dbContext.Stocks.Where(x => products.Contains(x.ProductId)).ToListAsync();
+
+            _logger.LogInformation("--- Retrieve products from database");
 
             foreach( var item in notification.Items)
             {
@@ -34,13 +41,16 @@ namespace Catalog.Service.EventHandlers
                 {
                     if (entry == null || item.Stock > entry.Stock)
                     {
+                        _logger.LogError($"Product {entry.ProductId} - doesn't have enough stock");
                         throw new Exception($"Product {entry.ProductId} - doesn't have enough stock");
                     }
 
                     entry.Stock -= item.Stock;
+                    _logger.LogInformation($"--- Product {entry.ProductId} - its stock was subtracted - new stock {entry.Stock}");
                 }
                 else
                 {
+                    
                     if (entry == null )
                     {
                         entry = new ProductInStock
@@ -49,13 +59,18 @@ namespace Catalog.Service.EventHandlers
                             Stock = 0
                         };
                         await _dbContext.AddAsync(entry);
+
+                        _logger.LogInformation($"--- New stock record was created for {entry.ProductId}");
                     }
 
                     entry.Stock += item.Stock;
+                    _logger.LogInformation($"--- Product {entry.ProductId} - its stock was incremented - new stock {entry.Stock}");
                 }
             }
 
             await _dbContext.SaveChangesAsync();
+
+            _logger.LogInformation("--- ProductInStockUpdateCommand finished");
         }
     }
 }
