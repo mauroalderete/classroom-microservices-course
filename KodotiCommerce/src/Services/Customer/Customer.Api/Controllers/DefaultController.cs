@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Customer.Api.Controllers
 {
     [ApiController]
-    [Route("/v1/")]
+    [Route("/")]
     public class DefaultController : ControllerBase
     {
         private readonly ILogger<DefaultController> _logger;
