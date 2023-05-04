@@ -8,20 +8,26 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace Order.Service.EventHandlers
 {
     public class OrderCreateEventHandler : INotificationHandler<OrderCreateCommand>
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly ILogger _logger;
 
-        public OrderCreateEventHandler(ApplicationDbContext dbContext)
+        public OrderCreateEventHandler(
+            ApplicationDbContext dbContext,
+            ILogger<OrderCreateEventHandler> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public async Task Handle(OrderCreateCommand notification, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("OrderCreateCommand started");
             var order = new Domain.Order()
             {
                 ClientId = notification.ClientId,
@@ -46,6 +52,7 @@ namespace Order.Service.EventHandlers
             await _dbContext.AddAsync(order);
 
             await _dbContext.SaveChangesAsync();
+            _logger.LogInformation("OrderCreateCommand completed");
         }
     }
 }
