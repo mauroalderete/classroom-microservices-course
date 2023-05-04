@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Order.Persistence.Database;
+using Order.Service.Proxies;
+using Order.Service.Proxies.Catalog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +39,11 @@ namespace Order.Api
             );
 
             services.AddTransient<IOrderQueryService, OrderQueryService>();
+
+            services.Configure<ApiUrls>(
+                opt => Configuration.GetSection("ApiUrls").Bind(opt));
+
+            services.AddHttpClient<ICatalogProxy, CatalogProxy>();
 
             services.AddMediatR(Assembly.Load("Order.Service.EventHandlers"));
 

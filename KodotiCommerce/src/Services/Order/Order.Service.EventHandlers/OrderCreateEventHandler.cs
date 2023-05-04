@@ -9,6 +9,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using Order.Service.Proxies.Catalog;
+using Order.Service.Proxies.Catalog.Commands;
 
 namespace Order.Service.EventHandlers
 {
@@ -16,25 +18,21 @@ namespace Order.Service.EventHandlers
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger _logger;
+        private readonly ICatalogProxy _catalogProxy;
 
         public OrderCreateEventHandler(
             ApplicationDbContext dbContext,
-            ILogger<OrderCreateEventHandler> logger)
+            ILogger<OrderCreateEventHandler> logger,
+            ICatalogProxy catalogProxy)
         {
             _dbContext = dbContext;
             _logger = logger;
+            _catalogProxy = catalogProxy;
         }
 
         public async Task Handle(OrderCreateCommand notification, CancellationToken cancellationToken)
         {
             _logger.LogInformation("OrderCreateCommand started");
-            //var order = new Domain.Order()
-            //{
-            //    ClientId = notification.ClientId,
-            //    CreatedAt = DateTime.Now,
-            //    Status = notification.Status,
-            //    PaymentType = notification.PaymentType,
-            //};
 
             var order = new Domain.Order();
 
@@ -53,13 +51,18 @@ namespace Order.Service.EventHandlers
 
                 //TODO: Update Stock notification
                 _logger.LogInformation("Updating stock");
+                await _catalogProxy.UpdateStockAsync(new ProductInStockUpdateCommand
+                {
+                    Items = notification.Items.Select(i => new ProductInStockUpdateItem
+                    {
+                        Action = ProductInStockAction.Substract,
+                        ProductId = i.ProductId,
+                        Stock = i.Quantity,
+                    }),
+                });
 
                 await transaction.CommitAsync();
             }
-
-            await _dbContext.AddAsync(order);
-
-            await _dbContext.SaveChangesAsync();
             _logger.LogInformation("OrderCreateCommand completed");
         }
 
