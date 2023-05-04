@@ -1,5 +1,6 @@
 using Identity.Domain;
 using Identity.Persistence.Database;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Identity.Api
@@ -35,6 +37,28 @@ namespace Identity.Api
                     x => x.MigrationsHistoryTable("__EFMigrationsHistory", "Identity")
                 )
             );
+
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                // User settings
+                options.User.RequireUniqueEmail = true;
+            });
+
+
+            // Event handlers
+            services.AddMediatR(Assembly.Load("Identity.Service.EventHandler"));
 
             services.AddControllers();
         }
