@@ -7,17 +7,12 @@ using System.Threading.Tasks;
 
 namespace Order.Service.Proxies.Catalog
 {
-    public interface ICatalogProxy
-    {
-        Task UpdateStockAsync(ProductInStockUpdateCommand command);
-    }
-
-    public class CatalogProxy : ICatalogProxy
+    public class CatalogHttpProxy : ICatalogProxy
     {
         private readonly ApiUrls _urls;
         private readonly HttpClient _httpClient;
 
-        public CatalogProxy(IOptions<ApiUrls> urls, HttpClient httpClient)
+        public CatalogHttpProxy(IOptions<ApiUrls> urls, HttpClient httpClient)
         {
             _urls = urls.Value;
             _httpClient = httpClient;
