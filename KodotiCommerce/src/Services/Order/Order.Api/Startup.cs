@@ -49,10 +49,12 @@ namespace Order.Api
             services.Configure<AzureServiceBus>(
                 opt => Configuration.GetSection("AzureServiceBus").Bind(opt));
 
-            // services.AddHttpClient<ICatalogProxy, CatalogHttpProxy>();
-            services.AddTransient<ICatalogProxy, CatalogQueueProxy>();
+            services.AddHttpClient<ICatalogProxy, CatalogHttpProxy>();
+            // services.AddTransient<ICatalogProxy, CatalogQueueProxy>();
 
             services.AddMediatR(Assembly.Load("Order.Service.EventHandlers"));
+
+            services.AddHttpContextAccessor();
 
             // Configura la autenticación JWT
             services.AddAuthentication(options =>
