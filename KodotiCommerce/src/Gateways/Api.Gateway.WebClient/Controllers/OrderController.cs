@@ -20,11 +20,19 @@ namespace Api.Gateway.WebClient.Controllers
     {
         private readonly ILogger<DefaultController> _logger;
         private readonly IOrderProxy _orderProxy;
+        private readonly ICustomerProxy _customerProxy;
+        private readonly ICatalogProxy _catalogProxy;
 
-        public OderController(ILogger<DefaultController> logger, IOrderProxy orderProxy)
+        public OderController(
+            ILogger<DefaultController> logger,
+            IOrderProxy orderProxy,
+            ICustomerProxy customerProxy,
+            ICatalogProxy catalogProxy)
         {
             _logger = logger;
             _orderProxy = orderProxy;
+            _customerProxy = customerProxy;
+            _catalogProxy = catalogProxy;
         }
 
         [HttpGet]
@@ -36,7 +44,21 @@ namespace Api.Gateway.WebClient.Controllers
         [HttpGet("{id}")]
         public async Task<OrderDto> Get(int id)
         {
-            return await _orderProxy.GetOrderAsync(id);
+            var order = await _orderProxy.GetOrderAsync(id);
+
+            order.Client = await _customerProxy.Get(order.ClientId);
+
+            var productsId = order.Items.Select(x => x.ProductId).Distinct().ToList();
+            var productsIdarg = string.Join(",", productsId);
+
+            var products = await _catalogProxy.GetAll(1, productsId.Count,  productsIdarg);
+
+            foreach( var item in order.Items)
+            {
+                item.Product = products.Items.Single(p => p.ProductId == item.ProductId);
+            }
+
+            return order;
         }
 
         [HttpPost]
