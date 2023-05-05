@@ -10,7 +10,14 @@ using System.Threading.Tasks;
 
 namespace Api.Gateway.Proxies
 {
-    public class OrderProxy
+    public interface IOrderProxy
+    {
+        Task<DataCollection<OrderDto>> GetOrdersAsync();
+        Task<OrderDto> GetOrderAsync(int id);
+        Task CreateOrderAsync(OrderCreateCommand command);
+    }
+
+    public class OrderProxy : IOrderProxy
     {
         private readonly ApiUrls _urls;
         private readonly HttpClient _httpClient;

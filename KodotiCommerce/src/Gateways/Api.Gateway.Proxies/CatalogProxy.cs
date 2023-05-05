@@ -10,7 +10,15 @@ using System.Threading.Tasks;
 
 namespace Api.Gateway.Proxies
 {
-    public class CatalogProxy
+    public interface ICatalogProxy
+    {
+        Task<DataCollection<ProductDto>> GetAll(int page = 1, int take = 10, string ids = null);
+        Task<ProductDto> Get(int id);
+        Task Create(ProductCreateCommand command);
+        Task UpdateStockAsync(ProductInStockUpdateCommand command);
+    }
+
+    public class CatalogProxy : ICatalogProxy
     {
         private readonly ApiUrls _urls;
         private readonly HttpClient _httpClient;

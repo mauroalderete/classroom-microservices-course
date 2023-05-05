@@ -10,7 +10,14 @@ using System.Threading.Tasks;
 
 namespace Api.Gateway.Proxies
 {
-    public class CustomerProxy
+    public interface ICustomerProxy
+    {
+        Task<DataCollection<ClientDto>> GetAll(int page, int take, string ids);
+        Task<ClientDto> Get(int id);
+        Task Create(ClientCreateCommand command);
+    }
+
+    public class CustomerProxy : ICustomerProxy
     {
         private readonly ApiUrls _urls;
         private readonly HttpClient _httpClient;
