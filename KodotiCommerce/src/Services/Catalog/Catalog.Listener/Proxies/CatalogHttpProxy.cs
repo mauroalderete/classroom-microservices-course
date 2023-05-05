@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Catalog.Listener.Proxies
 {
+    // TODO: Catalog API requires jwt authentication
     public class CatalogHttpProxy : ICatalogProxy
     {
         private readonly ApiUrls _urls;

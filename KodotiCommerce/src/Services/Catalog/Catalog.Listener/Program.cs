@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 
 namespace Catalog.Listener
 {
+    // TODO: Convert this console app to a Windows Service
+    // TODO: Use a logging framework
+    // TODO: Use a DI framework
+    // TODO: Use a configuration framework
     class Program
     {
         const string appsettingFile = "appsettings.json";
