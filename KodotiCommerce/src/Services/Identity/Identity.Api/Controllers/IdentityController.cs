@@ -49,5 +49,23 @@ namespace Identity.Api.Controllers
 
             return BadRequest(ModelState);
         }
+
+        [HttpPost("auth")]
+        public async Task<IActionResult> Login(UserLoginCommand command)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _mediator.Send(command);
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            return BadRequest(ModelState);
+        }
     }
 }

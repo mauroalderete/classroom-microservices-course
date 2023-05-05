@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Order.Service.Proxies.Catalog.Commands;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
@@ -12,10 +13,12 @@ namespace Order.Service.Proxies.Catalog
         private readonly ApiUrls _urls;
         private readonly HttpClient _httpClient;
 
-        public CatalogHttpProxy(IOptions<ApiUrls> urls, HttpClient httpClient)
+        public CatalogHttpProxy(IOptions<ApiUrls> urls, HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
         {
             _urls = urls.Value;
             _httpClient = httpClient;
+
+            _httpClient.AddBearerToken(httpContextAccessor);
         }
         public async Task UpdateStockAsync(ProductInStockUpdateCommand command)
         {

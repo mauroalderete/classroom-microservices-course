@@ -2,6 +2,8 @@
 using Customer.Service.Queries;
 using Customer.Service.Queries.DTO;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Service.Common.Collection;
@@ -12,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Customer.Api.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("v1/clients")]
     public class ClientController : ControllerBase

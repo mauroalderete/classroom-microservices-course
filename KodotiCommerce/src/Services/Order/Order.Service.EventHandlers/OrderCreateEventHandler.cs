@@ -49,7 +49,6 @@ namespace Order.Service.EventHandlers
                 await _dbContext.SaveChangesAsync();
                 _logger.LogInformation($"Order ${order.OrderId} was saved");
 
-                //TODO: Update Stock notification
                 _logger.LogInformation("Updating stock");
                 await _catalogProxy.UpdateStockAsync(new ProductInStockUpdateCommand
                 {
