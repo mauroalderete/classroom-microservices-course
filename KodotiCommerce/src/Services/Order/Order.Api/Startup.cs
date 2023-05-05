@@ -1,6 +1,7 @@
 using Common.Logging;
 using Customer.Service.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Order.Persistence.Database;
 using Order.Service.Proxies;
 using Order.Service.Proxies.Catalog;
@@ -16,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Order.Api
@@ -51,6 +54,24 @@ namespace Order.Api
 
             services.AddMediatR(Assembly.Load("Order.Service.EventHandlers"));
 
+            // Configura la autenticación JWT
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("SecretKey"))),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true
+                };
+            });
+
             services.AddControllers();
         }
 
@@ -68,6 +89,8 @@ namespace Order.Api
                 (msg, level) => level >= LogLevel.Information));
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
